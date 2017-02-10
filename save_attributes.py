@@ -23,6 +23,8 @@
 from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
 from PyQt4.QtGui import QAction, QIcon
 # Initialize Qt resources from file resources.py
+from PyQt4.QtGui import QFileDialog
+
 import resources
 # Import the code for the dialog
 from save_attributes_dialog import SaveAttributesDialog
@@ -135,6 +137,9 @@ class SaveAttributes:
         # Create the dialog (after translation) and keep reference
         self.dlg = SaveAttributesDialog()
 
+        self.dlg.lineEdit.clear()
+        self.dlg.pushButton.clicked.connect(self.select_output_file)
+
         icon = QIcon(icon_path)
         action = QAction(icon, text, parent)
         action.triggered.connect(callback)
@@ -178,6 +183,11 @@ class SaveAttributes:
             self.iface.removeToolBarIcon(action)
         # remove the toolbar
         del self.toolbar
+
+
+    def select_output_file(self):
+        filename = QFileDialog.getSaveFileName(self.dlg, "Select output file ", "", '*.txt')
+        self.dlg.lineEdit.setText(filename)
 
 
     def run(self):
