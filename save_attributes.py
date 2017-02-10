@@ -206,4 +206,16 @@ class SaveAttributes:
         if result:
             # Do something useful here - delete the line containing pass and
             # substitute with your code.
-            pass
+            filename = self.dlg.lineEdit.text()
+            output_file = open(filename, 'w')
+
+            selectedLayerIndex = self.dlg.comboBox.currentIndex()
+            selectedLayer = layers[selectedLayerIndex]
+            fields = selectedLayer.pendingFields()
+            fieldnames = [field.name() for field in fields]
+
+            for f in selectedLayer.getFeatures():
+                line = ','.join(unicode(f[x]) for x in fieldnames) + '\n'
+                unicode_line = line.encode('utf-8')
+                output_file.write(unicode_line)
+            output_file.close()
